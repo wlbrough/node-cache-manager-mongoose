@@ -128,7 +128,7 @@ class MongooseStore {
                 key = null;
             }
             if (key) {
-                query = { _id: { $regex: new Regexp('^' + key, 'i') } };
+                query = { _id: { $regex: new RegExp('^' + key, 'i') } };
             }
             return this.model.remove(query)
                 .then(() => {
