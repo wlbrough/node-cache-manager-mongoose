@@ -120,6 +120,19 @@ class MongooseStore {
         }
     }
 
+    resetNamespace(namespace, fn) {
+        try {
+            return this.model.remove({
+                _id: {
+                    $regex: new Regexp('^' + namespace + ':', 'i')
+                }
+            })
+            .then(() => this.result(fn));
+        } catch (e) {
+            this.result(fn, e);
+        }
+    }
+
     reset(key, fn) {
         try {
             if ("function" === typeof key) {
