@@ -120,26 +120,17 @@ class MongooseStore {
         }
     }
 
-    resetNamespace(namespace, fn) {
-        try {
-            return this.model.remove({
-                _id: {
-                    $regex: new Regexp('^' + namespace + ':', 'i')
-                }
-            })
-            .then(() => this.result(fn));
-        } catch (e) {
-            this.result(fn, e);
-        }
-    }
-
     reset(key, fn) {
         try {
+            let query = {};
             if ("function" === typeof key) {
                 fn = key;
                 key = null;
             }
-            return this.model.remove({})
+            if (key) {
+                query = { _id: { $regex: new Regexp('^' + key, 'i') } };
+            }
+            return this.model.remove(query)
                 .then(() => {
                     if (fn) {
                         fn();
