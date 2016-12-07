@@ -140,6 +140,30 @@ class MongooseStore {
             this.result(fn, e);
         }
     }
+
+    keys(fn) {
+        try {
+            return this.model
+                .find({})
+                .then(records => {
+                    if (!record) {
+                        return this.result(fn);
+                    }
+
+                    records = records.filter(function(record) {
+                        return (record.exp && record.exp > new Date())
+                    }).map(function(record) {
+                        return record._id;
+                    });
+
+                    this.result(fn, null, records);
+                })
+                .catch(e => this.result(fn, e));
+        }
+        catch (e) {
+            this.result(fn, e);
+        }
+    }
 }
 
 module.exports = {
