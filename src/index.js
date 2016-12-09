@@ -146,8 +146,8 @@ class MongooseStore {
             return this.model
                 .find({})
                 .then(records => {
-                    if (!record) {
-                        return this.result(fn);
+                    if (!records) {
+                        return this.result(fn, 'no records');
                     }
 
                     records = records.filter(function(record) {
